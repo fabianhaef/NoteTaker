@@ -1,29 +1,23 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text, Button } from 'react-native';
-import { useState } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { StyleSheet } from 'react-native';
 
-import { NoteTakingInput } from './components/NoteTakingInput';
-import { HomeScreen } from './components/HomeScreen';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import { HomeScreen } from './screens/HomeScreen';
+import { EditNoteScreen } from './screens/EditNoteScreen';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [text, setText] = useState<string>('');
-  const [shouldCreateNewNote, setShouldCreateNewNote] = useState<boolean>(false);
-
-  const saveNote = async () => {
-    await AsyncStorage.setItem('note', text);
-    setShouldCreateNewNote(false);
-  }
-
   return (
-    <View style={styles.container}>
+    <NavigationContainer>
       <StatusBar style="auto" />
-      {shouldCreateNewNote ? (
-        <NoteTakingInput saveNote={saveNote} />
-      ) : (
-        <HomeScreen toggleNewNote={setShouldCreateNewNote} />
-      )}
-    </View>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="NewNote" component={EditNoteScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 

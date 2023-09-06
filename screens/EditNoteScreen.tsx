@@ -1,11 +1,16 @@
 import React from 'react'
 
-import { saveNote } from '../services/noteStoreService'
-import { NoteTakingInput } from '../components/NoteTakingInput'
+import { useRoute } from "@react-navigation/native";
+import { saveNote } from '../services/noteStoreService';
+import { NoteTakingInput } from '../components/NoteTakingInput';
+
 
 export const EditNoteScreen: React.FC = () => {
+    const route = useRoute<EditScreenRouteProp>();
+    const noteId = route.params.noteId;
+
     return (
-        <NoteTakingInput saveNote={saveNote} />
+        <NoteTakingInput saveNote={saveNote} noteId={noteId} />
     )
 }
 

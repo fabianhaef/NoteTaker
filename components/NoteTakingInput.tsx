@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useLayoutEffect } from "react";
 
 import { StyleSheet, TextInput, Button } from 'react-native';
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 
-import { getNote, saveNote } from "../services/noteStoreService";
+import { getNote } from "../services/noteStoreService";
+import { SaveNote } from "./SaveNote";
 import { ScreenNavigationProp } from "../types";
 
 type Props = {
@@ -14,31 +15,22 @@ export const NoteTakingInput: React.FC<Props> = ({ noteId }) => {
     const [text, setText] = useState<string>('');
     const navigation = useNavigation<ScreenNavigationProp>();
 
-
     useEffect(() => {
         if (noteId) {
             getNote(noteId).then(result => setText(result?.text ?? ''));
         }
     }, [])
 
-    const saveNoteHandler = async () => {
-        await saveNote(text, noteId)
-
-        if (navigation.canGoBack()) {
-            navigation.goBack()
-        }
-    }
-
     useLayoutEffect(() => {
         navigation.setOptions({
-            headerLeft: () => (<Button title="back" onPress={saveNoteHandler} />)
+            headerLeft: () => <SaveNote text={text} id={noteId ?? ''} />
         });
     }, [navigation, text, noteId])
 
     return (
         <>
             <TextInput autoFocus={true} multiline={true} style={styles.textInput} value={text} onChangeText={setText} />
-            <Button title="Save note" onPress={saveNoteHandler} />
+
         </>
     )
 }

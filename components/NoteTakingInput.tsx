@@ -12,7 +12,7 @@ export const NoteTakingInput: React.FC<Props> = ({ saveNote }) => {
 
     return (
         <>
-            <TextInput multiline={true} style={styles.textInput} value={text} onChangeText={setText} />
+            <TextInput autoFocus={true} multiline={true} style={styles.textInput} value={text} onChangeText={setText} />
             <Button title="Save note" onPress={() => saveNote(text)} />
         </>
     )

@@ -1,6 +1,5 @@
 import React from "react";
 
-import { Button  } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import { ScreenNavigationProp } from "../types";
@@ -16,7 +15,6 @@ export const HomeScreen: React.FC<Props> = () => {
     return (
         <>
             <SavedNotesList />
-            <Button onPress={() => navigation.navigate("EditNote")} title="New Note" />
         </>
     )
 }

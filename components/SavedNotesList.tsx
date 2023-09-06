@@ -1,12 +1,16 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { useFocusEffect } from '@react-navigation/native';
-import { Note, getAllNotes } from "../services/noteStoreService";
 import { useState } from "react";
+import { View, Text, StyleSheet, ScrollView, Pressable } from "react-native";
+import { useFocusEffect } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
+
+import { Note, getAllNotes } from "../services/noteStoreService";
+import { ScreenNavigationProp } from "../types";
 
 
 export const SavedNotesList: React.FC = () => {
     const [notes, setNotes] = useState<Note[]>([]);
+    const navigation = useNavigation<ScreenNavigationProp>();
 
     useFocusEffect(() => {
         getAllNotes().then(result => setNotes(result.notes))
@@ -14,11 +18,15 @@ export const SavedNotesList: React.FC = () => {
 
     return (
         <View style={styles.container}>
-            {notes.map(note => (
-                <View style={styles.row}>
-                    <Text style={styles.noteText} key={note.id}>{note.text.length === 0 ? '(Blank note)' : note.text}</Text>
-                </View>
-            ))}
+            <ScrollView>
+                {notes.map(note => (
+                    <Pressable key={note.id} onPress={() => navigation.navigate('EditNote', { noteId: note.id })}>
+                        <View style={styles.row}>
+                            <Text style={styles.noteText} key={note.id}>{note.text.length === 0 ? '(Blank note)' : note.text}</Text>
+                        </View>
+                    </Pressable>
+                ))}
+            </ScrollView>
         </View>
     )
 }

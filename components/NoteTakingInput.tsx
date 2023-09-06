@@ -33,10 +33,10 @@ const styles = StyleSheet.create({
     textInput: {
         backgroundColor: '#FFEACD',
         width: '100%',
-        height: 200,
         fontSize: 16,
         paddingHorizontal: 20,
         paddingTop: 30,
+        flex: 1,
         paddingBottom: 20,
     }
 });

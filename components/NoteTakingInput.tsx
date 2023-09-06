@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
-import { useState } from 'react';
+import React, { useEffect, useState, useLayoutEffect } from "react";
 
 import { StyleSheet, TextInput, Button } from 'react-native';
+import { useNavigation, useRoute } from "@react-navigation/native"
+
 import { getNote, saveNote } from "../services/noteStoreService";
+import { ScreenNavigationProp } from "../types";
 
 type Props = {
     noteId: string | undefined;
@@ -10,6 +12,8 @@ type Props = {
 
 export const NoteTakingInput: React.FC<Props> = ({ noteId }) => {
     const [text, setText] = useState<string>('');
+    const navigation = useNavigation<ScreenNavigationProp>();
+
 
     useEffect(() => {
         if (noteId) {
@@ -17,9 +21,19 @@ export const NoteTakingInput: React.FC<Props> = ({ noteId }) => {
         }
     }, [])
 
-    const saveNoteHandler = () => {
-        saveNote(text, noteId)
+    const saveNoteHandler = async () => {
+        await saveNote(text, noteId)
+
+        if (navigation.canGoBack()) {
+            navigation.goBack()
+        }
     }
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            headerLeft: () => (<Button title="back" onPress={saveNoteHandler} />)
+        });
+    }, [navigation, text, noteId])
 
     return (
         <>

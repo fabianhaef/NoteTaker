@@ -27,6 +27,23 @@ export const getNote = async (id: string) => {
     return note;
 };
 
+export const deleteNote = async (noteId: string) => {
+    // get the store
+    const noteStore = await getAllNotes();
+
+    // get noteIndes by using the noteId
+    const noteIndex = noteStore.notes.findIndex(note => note.id === noteId);
+
+    // remove with the splice function
+    noteStore.notes.splice(noteIndex, 1);
+
+    // create new store 
+    const newStore = JSON.stringify(noteStore)
+
+    // set newItem onto async storage
+    await AsyncStorage.setItem(STORE_KEY, newStore)
+}
+
 export const saveNote = async (text: string, noteId: string | undefined) => {
     const noteStore = await getAllNotes();
     if (noteId) {
